@@ -9,16 +9,21 @@ class DecodeInfo:
         self._end   = end
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @property
-    def start(self):
+    def start(self) -> int:
         return self._start
+
     @property
-    def end(self):
+    def end(self) -> int:
         return self._end
 
+class ReadCfgFile:
+    def __init__(self, fileName: str) -> None:
+        self._fileName = ""
+        pass
 
 class DecodeHexStr:
     def __init__(self) -> None:
