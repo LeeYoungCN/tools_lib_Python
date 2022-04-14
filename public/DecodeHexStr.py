@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import false, true
+import re
+from numpy import character
+
+from sqlalchemy import false
+
 
 class DecodeInfo:
-    def __init__(self, name:str = "", start:int = 0, end:int = 0) -> None:
-        self._name  = name
-        self._start = start
-        self._end   = end
+    def __init__(self, name: str = "", start: int = 0, end: int = 0) -> None:
+        self._name:str  = name
+        self._start:int = start
+        self._end:int   = end
 
     @property
     def name(self) -> str:
@@ -20,39 +24,44 @@ class DecodeInfo:
     def end(self) -> int:
         return self._end
 
-class ReadCfgFile:
-    def __init__(self, fileName: str) -> None:
-        self._fileName = ""
-        pass
-
 class DecodeHexStr:
-    def __init__(self) -> None:
-        self._m_hexStr:str = ""
-        self._m_decode_item:dict[str, tuple(int, int)] = {}
+    def __init__(self, input:str) -> None:
+        self._m_hexStr: str = input[::-1]
+        self._m_decode_item: list[DecodeInfo] = {}
 
-    def Decode(self, hexStr : str) -> None:
+    def Decode(self, hexStr: str) -> None:
         pass
+
+    def Decode2Bit(self) -> list[int] or None:
+        if self.__JudgeStrValid() is False:
+            print ("input is invalid\n")
+            return None
+        retStr = ""
+        for char in self._m_hexStr:
+            retStr += self.Hex2FullBitStr(char)
+        return retStr
+    
+    def Hex2FullBitStr(cls, char: character) -> str:
+        """
+        将字符转换为4位bit位
+        """
+        retStr: str = "0000"
+        bitStr: str =  bin(int(char, 16))[2:]
+        retStr = retStr[0: len(retStr) - len(bitStr)] + bitStr
+        return retStr
 
     def __JudgeStrValid(self) -> bool:
         """
         检查输入字符串是否合理
         """
-        if self._m_hexStr is None:
-            return false
-        for c in self._inputStr:
-            if (c >= '0' and c <= '9') :
-                continue
-            elif c >= 'A' and c <= 'Z' :
-                continue
-            elif c >= 'a' and c <= 'z':
-                continue
-            else:
-                return false
-
-        return true
+        pattern = re.compile(r'^[0-9a-fA-F]+$', re.I)
+        if pattern.match(self._m_hexStr) is None:
+            return False
+        return True
 
 
-if __name__ == "__main__" :
-    a = DecodeInfo("123", 1, 2)
-    print(a.start)
-    print("Hello world")
+if __name__ == "__main__":
+    a = DecodeHexStr("123456789aAbBcCdDeEfF")
+    a.Decode2Bit()
+    # a = "123"
+    # print("%d, %#hx" %(1, 10))
