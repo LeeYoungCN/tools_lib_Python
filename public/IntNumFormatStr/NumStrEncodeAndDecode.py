@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # coding=utf-8
 import math
+from typing import Dict, List
 from NumStringFormatManager import NumStringFormatManager as NumStrFmtMng
 from NumStringFormatManager import NumStrFmtEnum
 
-class DataStruct:
+class CodeStruct:
     def __init__(self, title: str = "", start: int = 0, end: int = 0) -> None:
         self.title: str = title
         self.start: int = start
@@ -18,9 +19,18 @@ class DataStruct:
 
 
 class NumStrEncodeAndDecode:
-    def __init__(self, num_str: str, str_fmt: NumStrFmtEnum, data_st_list: list[DataStruct]) -> None:
+    """
+    数字型字符串编码与解码
+    """
+    def __init__(self, num_str: str, str_fmt: NumStrFmtEnum, data_st_list: List[CodeStruct]) -> None:
+        """
+        构造函数
+        :param num_str: 数字型字符串
+        :param str_fmt: 字符串格式类型
+        :param data_st_list: 编码解码结构体数组
+        """
         self._bin_str: str = NumStrFmtMng.StrFmtTrans(num_str, str_fmt, NumStrFmtEnum.BIN)
-        self._data_dict: dict[str, DataStruct] = {}
+        self._data_dict: Dict[str, CodeStruct] = {}
 
         for data_st in data_st_list:
             if self._data_dict.get(data_st.title) is not None:
@@ -42,7 +52,7 @@ class NumStrEncodeAndDecode:
         return True
 
     @classmethod
-    def Decode(cls, bin_str: str, data: DataStruct) -> bool:
+    def Decode(cls, bin_str: str, data: CodeStruct) -> bool:
         bin_str: str = NumStrFmtMng.DelPrefix(bin_str, NumStrFmtEnum.BIN)
         str_len: int = len(bin_str)
         [start, end] = cls.GetRange(data, str_len)
@@ -52,7 +62,7 @@ class NumStrEncodeAndDecode:
         return True
 
     @classmethod
-    def Encode(cls, data: DataStruct, dst_bin_str: str) -> str or None:
+    def Encode(cls, data: CodeStruct, dst_bin_str: str) -> str or None:
         src_len = data.end - data.start
         src_str = NumStrFmtMng.Num2Str(data.val, NumStrFmtEnum.BIN, src_len)[2:]
         if src_len != len(src_str):
@@ -65,7 +75,7 @@ class NumStrEncodeAndDecode:
         return ret_str
 
     @classmethod
-    def GetRange(cls, data: DataStruct, str_len: int) -> int or None:
+    def GetRange(cls, data: CodeStruct, str_len: int) -> int or None:
         return cls.IndexConvert(data.end, str_len), cls.IndexConvert(data.start, str_len)
 
     @classmethod
