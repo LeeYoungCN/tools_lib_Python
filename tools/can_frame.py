@@ -9,6 +9,9 @@ from typing import List
 from user_lib.int_num_format_str.num_str_encode_and_decode import  NumStrEncodeAndDecode as NumSreEncDec
 from user_lib.int_num_format_str.num_str_encode_and_decode import CodeStruct
 from user_lib.int_num_format_str.num_str_format_manager    import NumStrFmtEnum as FmtEnum
+from user_lib.int_num_format_str.num_str_format_manager    import NumStringFormatManager as NumStrFmtMng
+
+CAN_FRAME_LEN = 32
 
 CODE_ST_LIST: List[CodeStruct] = [
     CodeStruct("协议类型", 23, 29),
@@ -20,16 +23,25 @@ CODE_ST_LIST: List[CodeStruct] = [
 
 class CanFrame:
     def __init__(self, hex_Str:str, data_list: List[CodeStruct] = CODE_ST_LIST) -> None:
-        self._recv_frame = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, 32)
-        self._send_farme = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, 32)
+        self._valid = NumStrFmtMng.IsHexStr(hex_Str)
+        if self._valid is False:
+            print("Init Fail")
+            return
+
+        self._recv_frame = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, CAN_FRAME_LEN)
+        self._send_farme = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, CAN_FRAME_LEN)
         self._Convert()
     
     def _Convert(self):
         self._send_farme.SetVal("原地址",   self._recv_frame.GetVal("目的地址"))
         self._send_farme.SetVal("目的地址", self._recv_frame.GetVal("原地址"))
-        self._send_farme.SetVal("QR标志位", 1 -self._recv_frame.GetVal("QR标志位"))
+        self._send_farme.SetVal("QR标志位", 1 - self._recv_frame.GetVal("QR标志位"))
 
     def Print(self):
+        if self._valid is False:
+            print("Init Fail")
+            return
+
         print("发送帧: ")
         self._recv_frame.PrintHexFormatStr()
         self._recv_frame.PrintList()

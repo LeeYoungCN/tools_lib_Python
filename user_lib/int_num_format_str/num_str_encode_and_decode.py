@@ -9,7 +9,9 @@ from user_lib.int_num_format_str.num_str_format_manager import NumStringFormatMa
 
 class CodeStruct:
     def __init__(self, title: str = "", start: int = 0, end: int = 0) -> None:
-
+        """
+        编码方式结构体
+        """
         self.title: str = title
         self.start: int = start
         self.end:   int = end
