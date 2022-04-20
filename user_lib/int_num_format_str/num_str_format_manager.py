@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
+import math
 import re
 from enum import Enum
 from pyclbr import Function
-import math
 from typing import Dict
+
 
 class NumStrFmtEnum(Enum):
     BIN = 2,
@@ -15,11 +16,11 @@ class NumStrFmtEnum(Enum):
 
 
 class __NumFmtInfo__:
-    def __init__(self, decimal: int, trans_f: Function, prefix: str, pattern: re.Pattern) -> None:
-        self._decimal: int = decimal  # 进制
-        self._trans_f: Function = trans_f  # 装换公式
-        self._prefix: str = prefix  # 前缀
-        self._pattern: re.Pattern = pattern  # 匹配模式
+    def __init__(self, decimal: int, trans_f, prefix: str, pattern: re.Pattern) -> None:
+        self._decimal: int          = decimal  # 进制
+        self._trans_f: Function     = trans_f  # 装换公式
+        self._prefix:  str          = prefix  # 前缀
+        self._pattern: re.Pattern   = pattern  # 匹配模式
 
     @property
     def decimal(self) -> int:
@@ -165,7 +166,7 @@ class NumStringFormatManager:
         """
         ret_str: str = cls._NumFmtInfoDict_[str_fmt].prefix
         dst_str: str = str(cls._NumFmtInfoDict_[str_fmt].trans_f(src_num))
-        
+
         if str_fmt is not NumStrFmtEnum.DEC:
             pre_len = len(cls._NumFmtInfoDict_[str_fmt].prefix)
             dst_str = dst_str[pre_len:]
@@ -203,10 +204,7 @@ class NumStringFormatManager:
         src_times = math.log2(cls._NumFmtInfoDict_[src_fmt].decimal)
         dst_times = math.log2(cls._NumFmtInfoDict_[dst_fmt].decimal)
 
-        if src_times < dst_times:
-            return 0
-
-        return cls.GetNumPartLen(src_str, src_fmt) * math.ceil(src_times / dst_times)
+        return math.ceil(cls.GetNumPartLen(src_str, src_fmt) * src_times / dst_times)
     
     @classmethod
     def GetNumPartLen(cls, num_str: str, num_fmt: NumStrFmtEnum) -> int:
@@ -247,5 +245,6 @@ class NumStringFormatManager:
             return True
         return False
 
+
 if __name__ == "__main__":
-    print(NumStringFormatManager.StrFmtTrans("0x1", NumStrFmtEnum.HEX, NumStrFmtEnum.BIN))
+    print(NumStringFormatManager.Num2Str(100, NumStrFmtEnum.HEX))
