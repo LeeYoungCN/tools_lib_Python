@@ -3,6 +3,7 @@
 from tools.can_frame.can_frame import CanFrame
 from user_lib.command_line_interface.cmd_line_itf import CmdLineItf
 
+
 class CanFrameCli(CmdLineItf):
     def __init__(self):
         super().__init__("CanFrame", "CAN帧解析")

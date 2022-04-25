@@ -9,7 +9,7 @@ class CmdLineItf:
     """
     def __init__(self, name: str, info: str) -> None:
         self._name: str = name
-        self._description:str = info
+        self._description: str = info
         self._sub_cli: Dict[str, CmdLineItf] = {}
         self._prefix: str = ""
 
@@ -29,7 +29,7 @@ class CmdLineItf:
             elif self._sub_cli.get(input_str) is not None:
                 self._sub_cli.get(input_str).RunCli()
             elif self.ProcInput(input_str) is False:
-                print("input error: %s"%(input_str))
+                print("input error: %s" % input_str)
 
     def SetPrefix(self, prefix: str) -> None:
         """
