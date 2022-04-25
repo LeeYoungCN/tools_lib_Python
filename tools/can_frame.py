@@ -29,13 +29,13 @@ class CanFrame:
             return
 
         self._recv_frame = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, CAN_FRAME_LEN)
-        self._send_farme = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, CAN_FRAME_LEN)
+        self._send_frame = NumSreEncDec(hex_Str, FmtEnum.HEX, data_list, CAN_FRAME_LEN)
         self._Convert()
     
     def _Convert(self):
-        self._send_farme.SetVal("原地址",   self._recv_frame.GetVal("目的地址"))
-        self._send_farme.SetVal("目的地址", self._recv_frame.GetVal("原地址"))
-        self._send_farme.SetVal("QR标志位", 1 - self._recv_frame.GetVal("QR标志位"))
+        self._send_frame.SetVal("原地址",   self._recv_frame.GetVal("目的地址"))
+        self._send_frame.SetVal("目的地址", self._recv_frame.GetVal("原地址"))
+        self._send_frame.SetVal("QR标志位", 1 - self._recv_frame.GetVal("QR标志位"))
 
     def Print(self):
         if self._valid is False:
@@ -46,5 +46,5 @@ class CanFrame:
         self._recv_frame.PrintHexFormatStr()
         self._recv_frame.PrintList()
         print("\n回复帧: ")
-        self._send_farme.PrintHexFormatStr()
-        self._send_farme.PrintList()
+        self._send_frame.PrintHexFormatStr()
+        self._send_frame.PrintList()

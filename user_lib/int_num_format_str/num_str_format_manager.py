@@ -17,10 +17,10 @@ class NumStrFmtEnum(Enum):
 
 class __NumFmtInfo__:
     def __init__(self, decimal: int, trans_f, prefix: str, pattern: re.Pattern) -> None:
-        self._decimal: int          = decimal  # 进制
-        self._trans_f: Function     = trans_f  # 装换公式
-        self._prefix:  str          = prefix  # 前缀
-        self._pattern: re.Pattern   = pattern  # 匹配模式
+        self._decimal: int = decimal  # 进制
+        self._trans_f: Function = trans_f  # 装换公式
+        self._prefix: str = prefix  # 前缀
+        self._pattern: re.Pattern = pattern  # 匹配模式
 
     @property
     def decimal(self) -> int:
@@ -41,9 +41,9 @@ class __NumFmtInfo__:
 
 class NumStringFormatManager:
     _NumFmtInfoDict_: Dict[NumStrFmtEnum, __NumFmtInfo__] = {
-        NumStrFmtEnum.BIN: __NumFmtInfo__(2,  bin, "0b", re.compile(r'^(0b)?[0-1]+$',   re.I)),
-        NumStrFmtEnum.OCT: __NumFmtInfo__(8,  oct, "0o", re.compile(r'^(0o)?[0-7]+$',   re.I)),
-        NumStrFmtEnum.DEC: __NumFmtInfo__(10, int, "",   re.compile(r'^[\d]+$',         re.I)),
+        NumStrFmtEnum.BIN: __NumFmtInfo__(2, bin, "0b", re.compile(r'^(0b)?[0-1]+$', re.I)),
+        NumStrFmtEnum.OCT: __NumFmtInfo__(8, oct, "0o", re.compile(r'^(0o)?[0-7]+$', re.I)),
+        NumStrFmtEnum.DEC: __NumFmtInfo__(10, int, "", re.compile(r'^[\d]+$', re.I)),
         NumStrFmtEnum.HEX: __NumFmtInfo__(16, hex, "0x", re.compile(r'^(0x)?[\da-f]+$', re.I)),
     }
 
@@ -85,7 +85,7 @@ class NumStringFormatManager:
         :return: 带前缀十六进制字符串
         """
         return NumStrFmtEnum.Num2Str(self._num_, NumStrFmtEnum.HEX, min_len)
-    
+
     @classmethod
     def GetNumStrZeros(cls, str_fmt: NumStrFmtEnum, str_len: int) -> str:
         return cls._NumFmtInfoDict_[str_fmt].prefix + "0" * str_len
@@ -192,7 +192,7 @@ class NumStringFormatManager:
 
         min_len = max(min_len, cls.CalDstMinLen(src_str, src_fmt, dst_fmt))
         return cls.Num2Str(dec_num, dst_fmt, min_len)
-    
+
     @classmethod
     def CalDstMinLen(cls, src_str: str, src_fmt: NumStrFmtEnum, dst_fmt: NumStrFmtEnum) -> int:
         if cls.IsRightFmt(src_str, src_fmt) is False:
@@ -205,7 +205,7 @@ class NumStringFormatManager:
         dst_times = math.log2(cls._NumFmtInfoDict_[dst_fmt].decimal)
 
         return math.ceil(cls.GetNumPartLen(src_str, src_fmt) * src_times / dst_times)
-    
+
     @classmethod
     def GetNumPartLen(cls, num_str: str, num_fmt: NumStrFmtEnum) -> int:
         """
@@ -238,13 +238,9 @@ class NumStringFormatManager:
             return src_str[prefix_len:]
 
         return src_str
-    
+
     @classmethod
     def HasPrefix(cls, src_str: str, src_fmt: NumStrFmtEnum) -> bool:
         if len(src_str) > 2 and src_str[:2] == cls._NumFmtInfoDict_[src_fmt].prefix:
             return True
         return False
-
-
-if __name__ == "__main__":
-    print(NumStringFormatManager.Num2Str(100, NumStrFmtEnum.HEX))

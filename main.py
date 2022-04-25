@@ -1,15 +1,17 @@
+#!/usr/bin/env python3
+# coding=utf-8
+
 import sys
-from tools.can_frame import CanFrame
 
-def main():
-    input_str = ""
-    for i in range(1, len(sys.argv)):
-        input_str += sys.argv[i]
+from main_cli import MainCli
+from tools.can_frame_cli import CanFrameCli
 
-    can_frame_decode = CanFrame(input_str)
-    can_frame_decode.Print()
+
+def main() -> None:
+    main_cli = MainCli()
+    main_cli.RegCli(CanFrameCli())
+    main_cli.RunCli()
 
 
 if __name__ == '__main__':
     main()
-

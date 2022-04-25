@@ -14,8 +14,8 @@ class CodeStruct:
         """
         self.title: str = title
         self.start: int = start
-        self.end:   int = end
-        self.val:   int = 0
+        self.end: int = end
+        self.val: int = 0
 
     def __str__(self) -> str:
         min_len = math.ceil((self.end - self.start) / 4)
@@ -27,6 +27,7 @@ class NumStrEncodeAndDecode:
     """
     数字型字符串编码与解码
     """
+
     def __init__(self, num_str: str, str_fmt: FmtEnum, data_st_list: List[CodeStruct], bit_num: int) -> None:
         """
         构造函数
@@ -45,7 +46,6 @@ class NumStrEncodeAndDecode:
             if NumStrEncodeAndDecode.Decode(self._bin_str, data_copy) is False:
                 continue
             self._data_dict[data_st.title] = data_copy
-
 
     def GetVal(self, key: str) -> int or None:
         """
@@ -74,7 +74,7 @@ class NumStrEncodeAndDecode:
     def PrintList(self):
         for [_, data] in self._data_dict.items():
             print(data)
-    
+
     def PrintHexFormatStr(self):
         print(NumStrFmtMng.StrFmtTrans(self._bin_str, FmtEnum.BIN, FmtEnum.HEX))
 
