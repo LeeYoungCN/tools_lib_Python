@@ -27,7 +27,6 @@ class NumStrEncodeAndDecode:
     """
     数字型字符串编码与解码
     """
-
     def __init__(self, num_str: str, str_fmt: FmtEnum, data_st_list: List[CodeStruct], bit_num: int) -> None:
         """
         构造函数
@@ -58,6 +57,13 @@ class NumStrEncodeAndDecode:
         return self._data_dict.get(key).val
 
     def SetVal(self, key: str, val: int or str, num_fmt: FmtEnum = FmtEnum.BIN) -> bool:
+        """
+        设置关键字的值, 并写入字符串
+        :param key: 关键字
+        :param val: 要设置值, 数字或数字字符串
+        :param num_fmt: 数字字符串的格式
+        :return 是否设置成功
+        """
         if self._data_dict.get(key) is None:
             return False
 
@@ -72,17 +78,32 @@ class NumStrEncodeAndDecode:
         return True
 
     def PrintList(self):
+        """
+        打印解码后的信息
+        """
         for [_, data] in self._data_dict.items():
             print(data)
 
     def PrintHexFormatStr(self):
+        """
+        以十六进制形式打印
+        """
         print(NumStrFmtMng.StrFmtTrans(self._bin_str, FmtEnum.BIN, FmtEnum.HEX))
 
     def PrintBinFormatStr(self):
+        """
+        以二进制形式打印
+        """
         print(self._bin_str)
 
     @classmethod
     def Decode(cls, src_bin_str: str, data: CodeStruct) -> bool:
+        """
+        解析字符串中的内容
+        :param src_bin_str: 原二进制数字字符串
+        :param data: 解码信息
+        :return 是否解码成功
+        """
         str_len: int = len(src_bin_str)
         [start, end] = cls._ConvertRange(data, str_len)
         if start is None or end is None:
@@ -92,8 +113,14 @@ class NumStrEncodeAndDecode:
 
     @classmethod
     def Encode(cls, dst_bin_str: str, data: CodeStruct) -> str or None:
+        """
+        :param dst_bin_str: 目标二进制字符串
+        :param data: 编码信息
+        :return 是否设置成功
+        """
         src_len = data.end - data.start
-        src_str = NumStrFmtMng.Num2Str(data.val, FmtEnum.BIN, src_len)[2:]
+        src_str = NumStrFmtMng.Num2Str(data.val, FmtEnum.BIN, src_len)
+        src_str = NumStrFmtMng.DelPrefix(src_str, FmtEnum.BIN)
         if src_len != len(src_str):
             return None
         dst_len: int = len(dst_bin_str)
@@ -105,10 +132,21 @@ class NumStrEncodeAndDecode:
 
     @classmethod
     def _ConvertRange(cls, data: CodeStruct, str_len: int) -> int or None:
+        """
+        范围转换
+        :param data: 解码信息
+        :param str_len: 字符串长度
+        :return 转换后的范围
+        """
         return cls._ConvertIndex(data.end, str_len), cls._ConvertIndex(data.start, str_len)
 
     @classmethod
     def _ConvertIndex(cls, index: int, str_len: int) -> int or None:
+        """
+        :param index: 待转换的位置
+        :param str_len: 字符串长度
+        :return 转换后的位置
+        """
         if index > str_len:
             return None
         return str_len - index

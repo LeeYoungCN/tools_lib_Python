@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding=utf-8
-from tools.can_frame import CanFrame
+from tools.can_frame.can_frame import CanFrame
 from user_lib.command_line_interface.cmd_line_itf import CmdLineItf
 
 class CanFrameCli(CmdLineItf):
@@ -9,4 +9,4 @@ class CanFrameCli(CmdLineItf):
 
     def ProcInput(self, input_str: str):
         tmp = CanFrame(input_str)
-        tmp.Print()
+        tmp.PrintResult()

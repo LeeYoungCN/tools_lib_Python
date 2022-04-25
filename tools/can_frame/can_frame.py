@@ -37,7 +37,7 @@ class CanFrame:
         self._send_frame.SetVal("目的地址", self._recv_frame.GetVal("原地址"))
         self._send_frame.SetVal("QR标志位", 1 - self._recv_frame.GetVal("QR标志位"))
 
-    def Print(self):
+    def PrintResult(self):
         if self._valid is False:
             print("Init Fail")
             return
